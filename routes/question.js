@@ -1,11 +1,10 @@
 var express = require("express");
 var router = express.Router();
-var Topic = require("../models/testTopic");
-var passport = require("passport");
+var Question = require("../models/question");
 var authenticate = require("../authenticate");
 router
-  .get("/", authenticate.verifyUser, (req, res) => {
-    Topic.find((error, topics) => {
+  .get("/:testId", authenticate.verifyUser, (req, res) => {
+    Question.find({ test_id: req.params.testId }, (error, questions) => {
       if (error) {
         res.statusCode = 500;
         res.setHeader("Content-Type", "application/json");
@@ -13,12 +12,12 @@ router
       } else {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json(topics);
+        res.json(questions);
       }
     });
   })
   .post("/add", authenticate.verifyUser, (req, res) => {
-    Topic.create(req.body, (error, topic) => {
+    Question.create(req.body, (error, question) => {
       if (error) {
         res.statusCode = 500;
         res.setHeader("Content-Type", "application/json");
@@ -26,7 +25,7 @@ router
       } else {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json(topic);
+        res.json(question);
       }
     });
   });

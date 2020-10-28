@@ -14,6 +14,10 @@ const testTopic = new Schema(
       type: Number,
       default: 0,
     },
+    total_marks: {
+      type: Number,
+      default: 100,
+    },
     description: {
       type: String,
       required: true,
