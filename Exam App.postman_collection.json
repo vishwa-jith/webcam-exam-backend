@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "26569fe6-4bd8-46cf-8a83-5a1a9fc5376a",
+		"name": "Exam App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Vishwajith\",\r\n    \"password\": \"vishwa@2001\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}users/login",
+					"host": [
+						"{{BASE_URL}}users"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstname\": \"name1\",\r\n    \"lastname\": \"name2\",\r\n    \"username\": \"Sample User\",\r\n    \"password\": \"sample\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}users/signup",
+					"host": [
+						"{{BASE_URL}}users"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get TestTopics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}test-topic",
+					"host": [
+						"{{BASE_URL}}test-topic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Questions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}questions/5f98f36e698e8ec27382ecc0",
+					"host": [
+						"{{BASE_URL}}questions"
+					],
+					"path": [
+						"5f98f36e698e8ec27382ecc0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add TestTopic",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"sample topic\",\r\n    \"total_marks\": 100,\r\n    \"description\": \"sample description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}test-topic/add",
+					"host": [
+						"{{BASE_URL}}test-topic"
+					],
+					"path": [
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Questions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"test_id\": \"5f98f36e698e8ec27382ecc0\",\r\n    \"question\": \"sample question\",\r\n    \"options\": [\r\n        \"opt1\",\r\n        \"opt2\",\r\n        \"opt3\",\r\n        \"opt4\"\r\n    ],\r\n    \"answer_option\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}questions/add",
+					"host": [
+						"{{BASE_URL}}questions"
+					],
+					"path": [
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"id": "ae187ae8-f1e0-44e6-9c36-aaa93a3211f7",
+			"key": "token",
+			"value": ""
+		},
+		{
+			"id": "a087994f-9808-4af1-92a8-74afa14357f1",
+			"key": "BASE_URL",
+			"value": "http://localhost:8000/"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

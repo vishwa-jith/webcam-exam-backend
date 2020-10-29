@@ -22,6 +22,14 @@ const testTopic = new Schema(
       type: String,
       required: true,
     },
+    duration_in_min: {
+      type: Number,
+      reuired: true,
+    },
+    start_time: {
+      type: Date,
+      required: true,
+    },
   },
   { timestamps: true }
 );
