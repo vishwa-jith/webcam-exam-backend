@@ -179,6 +179,43 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Add Test Marks",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    2,\r\n    2\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}questions/add-mark/5f98f36e698e8ec27382ecc0",
+					"host": [
+						"{{BASE_URL}}questions"
+					],
+					"path": [
+						"add-mark",
+						"5f98f36e698e8ec27382ecc0"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -193,12 +230,12 @@
 	},
 	"variable": [
 		{
-			"id": "ae187ae8-f1e0-44e6-9c36-aaa93a3211f7",
+			"id": "aa5edd9c-e4bd-4efe-9fd4-37eac6e46df0",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "a087994f-9808-4af1-92a8-74afa14357f1",
+			"id": "f905d8b0-4bf7-4b86-80fc-b03e54f081c5",
 			"key": "BASE_URL",
 			"value": "http://localhost:8000/"
 		}
