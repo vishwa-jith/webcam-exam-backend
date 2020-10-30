@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const testTopic = new Schema(
   {
+    test_name: {
+      type: String,
+      required: true,
+    },
     topic: {
       type: String,
       required: true,
@@ -26,9 +30,9 @@ const testTopic = new Schema(
       type: Number,
       reuired: true,
     },
-    start_time: {
-      type: Date,
-      required: true,
+    is_exam_started: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
