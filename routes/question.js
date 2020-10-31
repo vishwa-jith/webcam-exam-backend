@@ -14,7 +14,7 @@ router
       } else {
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json(questions);
+        res.json({ user_id: req.user._id, questions });
       }
     });
   })
