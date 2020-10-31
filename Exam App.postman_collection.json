@@ -97,12 +97,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}questions/5f98f36e698e8ec27382ecc0",
+					"raw": "{{BASE_URL}}questions/5f9bcc9cdbaaf33f08baaba6",
 					"host": [
 						"{{BASE_URL}}questions"
 					],
 					"path": [
-						"5f98f36e698e8ec27382ecc0"
+						"5f9bcc9cdbaaf33f08baaba6"
 					]
 				}
 			},
@@ -125,7 +125,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"topic\": \"sample topic\",\r\n    \"total_marks\": 100,\r\n    \"description\": \"sample description\"\r\n}",
+					"raw": "{\r\n    \"test_name\": \"CAT I\",\r\n    \"topic\": \"Computer Networks\",\r\n    \"total_marks\": 150,\r\n    \"description\": \"A computer network is a group of computers that use a set of common communication protocols over digital interconnections for the purpose of sharing resources located on or provided by the network nodes.\",\r\n    \"duration_in_min\": \"30\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -161,7 +161,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"test_id\": \"5f98f36e698e8ec27382ecc0\",\r\n    \"question\": \"sample question\",\r\n    \"options\": [\r\n        \"opt1\",\r\n        \"opt2\",\r\n        \"opt3\",\r\n        \"opt4\"\r\n    ],\r\n    \"answer_option\": 2\r\n}",
+					"raw": "{\r\n    \"test_id\": \"5f9bcc9cdbaaf33f08baaba6\",\r\n    \"question\": \"Electronic mail uses which Application layer protocol?\",\r\n    \"options\": [\r\n        \"SMTP\",\r\n        \"HTTP\",\r\n        \"FTP\",\r\n        \"SIP\"\r\n    ],\r\n    \"answer_option\": 0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -230,12 +230,12 @@
 	},
 	"variable": [
 		{
-			"id": "aa5edd9c-e4bd-4efe-9fd4-37eac6e46df0",
+			"id": "7e6fe0fe-7dc4-4d93-9644-f089fcfd9c5c",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "f905d8b0-4bf7-4b86-80fc-b03e54f081c5",
+			"id": "9cb183d9-fdaf-4356-992c-40e3e5676864",
 			"key": "BASE_URL",
 			"value": "http://localhost:8000/"
 		}
