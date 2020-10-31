@@ -10,14 +10,6 @@ const testTopic = new Schema(
       type: String,
       required: true,
     },
-    is_test_taken: {
-      type: Boolean,
-      default: false,
-    },
-    score: {
-      type: Number,
-      default: 0,
-    },
     total_marks: {
       type: Number,
       default: 100,
@@ -30,10 +22,11 @@ const testTopic = new Schema(
       type: Number,
       reuired: true,
     },
-    is_exam_started: {
-      type: Boolean,
-      default: false,
+    start_time: {
+      type: Date,
+      required: true,
     },
+    test_taken_users: [mongoose.Schema.Types.ObjectId],
   },
   { timestamps: true }
 );

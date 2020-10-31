@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var Question = require("../models/question");
 var Topic = require("../models/testTopic");
+var Info = require("../models/testInfo");
 var authenticate = require("../authenticate");
 router
   .get("/:testId", authenticate.verifyUser, (req, res) => {
@@ -53,21 +54,35 @@ router
                 { _id: req.params.testId },
                 {
                   $set: {
-                    score:
-                      (correct_answers.length / answers.length) *
-                      topic.total_marks,
-                    is_test_taken: true,
+                    test_taken_users: [...topic.test_taken_users, req.user._id],
                   },
                 },
-                (error, test) => {
+                (error, update) => {
                   if (error) {
                     res.statusCode = 500;
                     res.setHeader("Content-Type", "application/json");
-                    res.json({ message: "Failed to update mark score!" });
+                    res.json({ message: "Failed to update test topic!" });
                   } else {
-                    res.statusCode = 200;
-                    res.setHeader("Content-Type", "application/json");
-                    res.json("Test result updated sucessfully!");
+                    Info.create(
+                      {
+                        user_id: req.user._id,
+                        test_id: topic._id,
+                        score:
+                          (correct_answers.length / answers.length) *
+                          topic.total_marks,
+                      },
+                      (error, info) => {
+                        if (error) {
+                          res.statusCode = 500;
+                          res.setHeader("Content-Type", "application/json");
+                          res.json({ message: "Failed to update mark score!" });
+                        } else {
+                          res.statusCode = 200;
+                          res.setHeader("Content-Type", "application/json");
+                          res.json({ info });
+                        }
+                      }
+                    );
                   }
                 }
               );
