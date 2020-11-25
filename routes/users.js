@@ -24,7 +24,7 @@ router
       { last_seen: new Date() },
       (error, data) => {
         if (error) {
-          res.statusCode = 404;
+          res.statusCode = 403;
           res.setHeader("Content-Type", "application/json");
           res.json({ message: "Failed to to disconnect!" });
         } else {
@@ -41,7 +41,7 @@ router.post("/signup", (req, res, next) => {
     req.body.password,
     (err, user) => {
       if (err) {
-        res.statusCode = 404;
+        res.statusCode = 403;
         res.setHeader("Content-Type", "application/json");
         res.json({ message: err });
       } else {
@@ -75,13 +75,13 @@ router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
     if (!user) {
-      res.statusCode = 404;
+      res.statusCode = 403;
       res.setHeader("Content-Type", "application/json");
       res.json({ message: "Login Unsuccessful!", err: info });
     }
     req.logIn(user, (err) => {
       if (err) {
-        res.statusCode = 404;
+        res.statusCode = 403;
         res.setHeader("Content-Type", "application/json");
         res.json({
           message: "Login Unsuccessful!",
@@ -98,16 +98,10 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
-router.get("/logout", (req, res, next) => {
-  if (req.user) {
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "text/plain");
-    res.json({ message: "Logout Successful!" });
-  } else {
-    res.statusCode = 404;
-    res.setHeader("Content-Type", "text/plain");
-    res.json({ message: "Your not authenticated!" });
-  }
+router.get("/logout", authenticate.verifyUser, (req, res, next) => {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "text/plain");
+  res.json({ message: "Logout Successful!" });
 });
 router.get("/profile", authenticate.verifyUser, (req, res) => {
   User.findById(req.user._id)

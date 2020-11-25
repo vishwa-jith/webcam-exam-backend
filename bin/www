@@ -28,6 +28,13 @@ const performValidation = (imag) => {
   //   console.log(err);
   // });
   const base64text = imag; //Base64 encoded string
+  if (!base64text.includes("data:image/jpeg;base64")) {
+    return {
+      is_face_detected: false,
+      no_of_faces: null,
+      confidences: null,
+    };
+  }
   const base64data = base64text
     .replace("data:image/jpeg;base64", "")
     .replace("data:image/png;base64", ""); //Strip image type prefix
