@@ -20,10 +20,6 @@ const testTopic = new Schema(
     },
     duration_in_min: {
       type: Number,
-      reuired: true,
-    },
-    start_time: {
-      type: Date,
       required: true,
     },
     test_taken_users: [mongoose.Schema.Types.ObjectId],
