@@ -22,6 +22,10 @@ const testTopic = new Schema(
       type: Number,
       required: true,
     },
+    start_time: {
+      type: Date,
+      required: true,
+    },
     test_taken_users: [mongoose.Schema.Types.ObjectId],
   },
   { timestamps: true }
