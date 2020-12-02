@@ -49,7 +49,8 @@ router
             } else {
               const correct_answers = answers.filter(
                 (answer, index) =>
-                  answer.answer_option === req.body.answers[index].answer
+                  answer.answer_option ===
+                  parseInt(req.body.answers[index].answer)
               );
               Topic.update(
                 { _id: req.params.testId },
@@ -71,17 +72,26 @@ router
                         score:
                           (correct_answers.length / answers.length) *
                           topic.total_marks,
-                        ...req.body,
+                        answers: req.body.answers.map(({ answer }) => answer),
+                        end_time: req.body.end_time,
+                        answers_attended: req.body.answers_attended,
+                        answers_marked: req.body.answers_marked,
+                        unanswered: req.body.unanswered,
                       },
                       (error, info) => {
                         if (error) {
                           res.statusCode = 500;
                           res.setHeader("Content-Type", "application/json");
-                          res.json({ message: "Failed to update mark score!" });
+                          res.json(error);
                         } else {
                           res.statusCode = 200;
                           res.setHeader("Content-Type", "application/json");
-                          res.json({ info });
+                          res.json({
+                            info,
+                            correct_answers,
+                            answers,
+                            ans: req.body.answers,
+                          });
                         }
                       }
                     );
