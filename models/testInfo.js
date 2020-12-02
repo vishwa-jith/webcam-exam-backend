@@ -22,20 +22,27 @@ const testInfo = new Schema(
       type: Number,
       default: 0,
     },
+    answers: [Number],
     test_duration: {
       type: Number,
       default: 0,
+    },
+    start_time: {
+      type: Date,
+    },
+    end_time: {
+      type: Date,
+    },
+    answers_attended: {
+      type: Number,
+    },
+    answers_marked: {
+      type: Number,
+    },
+    unanswered: {
+      type: Number,
     },
   },
   { timestamps: true }
 );
 module.exports = mongoose.model("Info", testInfo);
-// testTopic.map((topic)=>{
-//   if(topic.test_taken_users.includes(user_id)){
-//     const selected=info.filter((ino)=>ino.user_id===user_id);
-//     return <></>
-//   }
-//   else{
-//     return <></>
-//   }
-// })

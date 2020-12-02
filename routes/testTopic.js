@@ -26,6 +26,35 @@ router
       }
     });
   })
+  .get("/:testId", authenticate.verifyUser, (req, res) => {
+    Info.find(
+      { user_id: req.user._id, test_id: req.params.testId },
+      (error, info) => {
+        if (error) {
+          res.statusCode = 500;
+          res.setHeader("Content-Type", "application/json");
+          res.json({ message: "Failed to fetch test info!" });
+        } else {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json(info);
+        }
+      }
+    );
+  })
+  .get("/single/:testId", authenticate.verifyUser, (req, res) => {
+    Topic.find({ _id: req.params.testId }, (error, topic) => {
+      if (error) {
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ message: "Failed to fetch test topic!" });
+      } else {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(topic);
+      }
+    });
+  })
   .post("/add", authenticate.verifyUser, (req, res) => {
     Topic.create(req.body, (error, topic) => {
       if (error) {

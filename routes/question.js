@@ -48,7 +48,8 @@ router
               res.json({ message: "Failed to fetch test topic!" });
             } else {
               const correct_answers = answers.filter(
-                (answer, index) => answer.answer_option === req.body[index]
+                (answer, index) =>
+                  answer.answer_option === req.body.answers[index].answer
               );
               Topic.update(
                 { _id: req.params.testId },
@@ -70,6 +71,7 @@ router
                         score:
                           (correct_answers.length / answers.length) *
                           topic.total_marks,
+                        ...req.body,
                       },
                       (error, info) => {
                         if (error) {
