@@ -65,18 +65,19 @@ router
                     res.setHeader("Content-Type", "application/json");
                     res.json({ message: "Failed to update test topic!" });
                   } else {
-                    Info.create(
+                    Info.update(
+                      { user_id: req.user._id, test_id: topic._id },
                       {
-                        user_id: req.user._id,
-                        test_id: topic._id,
-                        score:
-                          (correct_answers.length / answers.length) *
-                          topic.total_marks,
-                        answers: req.body.answers.map(({ answer }) => answer),
-                        end_time: req.body.end_time,
-                        answers_attended: req.body.answers_attended,
-                        answers_marked: req.body.answers_marked,
-                        unanswered: req.body.unanswered,
+                        $set: {
+                          score:
+                            (correct_answers.length / answers.length) *
+                            topic.total_marks,
+                          answers: req.body.answers.map(({ answer }) => answer),
+                          end_time: req.body.end_time,
+                          answers_attended: req.body.answers_attended,
+                          answers_marked: req.body.answers_marked,
+                          unanswered: req.body.unanswered,
+                        },
                       },
                       (error, info) => {
                         if (error) {
