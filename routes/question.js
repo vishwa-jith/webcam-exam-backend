@@ -77,6 +77,7 @@ router
                           answers_attended: req.body.answers_attended,
                           answers_marked: req.body.answers_marked,
                           unanswered: req.body.unanswered,
+                          is_fraudulant: req.body.is_fraudulant,
                         },
                       },
                       (error, info) => {
