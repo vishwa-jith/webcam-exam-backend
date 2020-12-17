@@ -9,8 +9,12 @@ const storage = multer.diskStorage({
     cb(null, "public/images/upload");
   },
   filename: (req, file, cb) => {
-    console.log(file);
-    cb(null, `${req.user._id.toString()}-${file.fieldname}`);
+    cb(
+      null,
+      `${req.user._id.toString()}-${file.fieldname}.${
+        file.mimetype.split("/")[1]
+      }`
+    );
   },
 });
 const fileFilter = (req, file, cb) => {
