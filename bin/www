@@ -9,24 +9,14 @@ var debug = require("debug")("webcam-exam-backend:server");
 var http = require("http");
 const socket = require("socket.io");
 var cv = require("opencv4nodejs");
-var path = require("path");
-var fs = require("fs");
-var request = require("request");
-const Jimp = require("jimp");
-
-const getDataFilePath = (fileName) => path.resolve(__dirname, fileName);
 
 const drawRect = (image, rect, color, opts = { thickness: 2 }) =>
   image.drawRectangle(rect, color, opts.thickness, cv.LINE_8);
+
 const drawBlueRect = (image, rect, opts = { thickness: 2 }) =>
   drawRect(image, rect, new cv.Vec(255, 0, 0), opts);
-const performValidation = (imag) => {
-  // fs.unlink("out.png", () => console.log("UnLinked"));
 
-  // var base64Data = imag.replace(/^data:image\/jpeg;base64,/, "");
-  // fs.writeFile("out.png", base64Data, "base64", function (err) {
-  //   console.log(err);
-  // });
+const performValidation = (imag) => {
   if (!imag) {
     return {
       is_face_detected: false,
@@ -34,36 +24,23 @@ const performValidation = (imag) => {
       confidences: null,
     };
   }
-  const base64text = imag; //Base64 encoded string
+  const base64text = imag;
   const base64data = base64text
     .replace("data:image/jpeg;base64", "")
-    .replace("data:image/png;base64", ""); //Strip image type prefix
+    .replace("data:image/png;base64", "");
   const buffer = Buffer.from(base64data, "base64");
   const image = cv.imdecode(buffer);
-  // const image = cv.imread(getDataFilePath("out.png"));
-
   const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
-
   // detect faces
   const { objects, numDetections } = classifier.detectMultiScale(
     image.bgrToGray()
   );
-
-  // console.log("faceRects:", objects);
-  // console.log("confidences:", numDetections);
-
-  if (!objects.length) {
-    console.log("No faces detected!");
-  }
-
   // draw detection
   const numDetectionsTh = 10;
   objects.forEach((rect, i) => {
     const thickness = numDetections[i] < numDetectionsTh ? 1 : 2;
     drawBlueRect(image, rect, { thickness });
   });
-
-  console.log(image);
   return {
     is_face_detected: objects.length ? true : false,
     no_of_faces: objects.length,
@@ -90,28 +67,6 @@ io.on("connection", (sock) => {
     const validation = performValidation(image.imageSrc);
     io.sockets.emit(image.user_id, validation);
   });
-  // sock.on("new_message", (data) => {
-  //   io.sockets.emit(data.to, data);
-  // });
-  // sock.on("received_message", (data) => {
-  //   io.sockets.emit(`update${data}`, data);
-  // });
-  // sock.on("status_online", (data) => {
-  //   if (!data.status) {
-  //     User.updateOne(
-  //       { _id: data._id },
-  //       { last_seen: new Date() },
-  //       (error, data) => {
-  //         if (error) {
-  //           console.log(error);
-  //         } else {
-  //           console.log(data);
-  //         }
-  //       }
-  //     );
-  //   }
-  //   io.sockets.emit(`status_online_all`, data);
-  // });
 });
 /**
  * Listen on provided port, on all network interfaces.

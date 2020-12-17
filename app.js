@@ -16,6 +16,7 @@ var usersRouter = require("./routes/users");
 var topicRouter = require("./routes/testTopic");
 var questionRouter = require("./routes/question");
 var infoRouter = require("./routes/testInfo");
+var uploadRouter = require("./routes/upload");
 
 var app = express();
 
@@ -47,6 +48,7 @@ app.use("/users", usersRouter);
 app.use("/test-topic", topicRouter);
 app.use("/questions", questionRouter);
 app.use("/test-info", infoRouter);
+app.use("/upload", uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -18,6 +18,14 @@ const User = new Schema({
     type: Date,
     default: Date.now,
   },
+  default_avatar: {
+    type: Boolean,
+    default: true,
+  },
+  default_cover: {
+    type: Boolean,
+    default: true,
+  },
 });
 User.plugin(passportLocalMongoose);
 module.exports = mongoose.model("User", User);
