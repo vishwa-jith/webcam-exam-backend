@@ -9,6 +9,7 @@ var debug = require("debug")("webcam-exam-backend:server");
 var http = require("http");
 const socket = require("socket.io");
 var cv = require("opencv4nodejs");
+var path = require("path");
 
 const drawRect = (image, rect, color, opts = { thickness: 2 }) =>
   image.drawRectangle(rect, color, opts.thickness, cv.LINE_8);
@@ -47,7 +48,75 @@ const performValidation = (imag) => {
     confidences: numDetections[0],
   };
 };
+const faceRecognition = (image) => {
+  const getFaceImage = (grayImg) => {
+    const faceRects = classifier.detectMultiScale(grayImg).objects;
+    if (!faceRects.length) {
+      throw new Error("failed to detect faces");
+    }
+    return grayImg.getRegion(faceRects[0]);
+  };
+  const basePath = "./public/images";
+  const imgsPath = path.resolve(basePath, "upload");
+  const nameMappings = [`${image.user_id}-profile`, `${image.user_id}-cover`];
+  const imgFiles = [
+    `${image.user_id}-profile.jpg`,
+    `${image.user_id}-cover.jpg`,
+  ];
+  const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
+  const trainImgs = imgFiles
+    // get absolute file path
+    .map((file) => path.resolve(imgsPath, file))
+    // read image
+    .map((filePath) => cv.imread(filePath))
+    // face recognizer works with gray scale images
+    .map((img) => img.bgrToGray())
+    // detect and extract face
+    .map(getFaceImage)
+    // face images must be equally sized
+    .map((faceImg) => faceImg.resize(80, 80));
+  const labels = imgFiles.map((file) =>
+    nameMappings.findIndex((name) => file.includes(name))
+  );
+  const lbph = new cv.LBPHFaceRecognizer();
+  lbph.train(trainImgs, labels);
 
+  // const base64text = image.imageSrc;
+  // const base64data = base64text
+  //   .replace("data:image/jpeg;base64", "")
+  //   .replace("data:image/png;base64", "");
+  // const buffer = Buffer.from(base64data, "base64");
+  // const twoFacesImg = cv.imdecode(buffer);
+
+  const twoFacesImg = cv.imread(path.resolve(basePath, "vishwajith.jpg"));
+  
+  const result = classifier.detectMultiScale(twoFacesImg.bgrToGray());
+  const minDetections = 10;
+  result.objects.forEach((faceRect, i) => {
+    if (result.numDetections[i] < minDetections) {
+      return;
+    }
+    const faceImg = twoFacesImg.getRegion(faceRect).bgrToGray();
+    const who = nameMappings[lbph.predict(faceImg).label];
+    console.log(lbph.predict(faceImg));
+
+    const rect = cv.drawDetection(twoFacesImg, faceRect, {
+      color: new cv.Vec(255, 0, 0),
+      segmentFraction: 4,
+    });
+
+    const alpha = 0.4;
+    cv.drawTextBox(
+      twoFacesImg,
+      new cv.Point(rect.x, rect.y + rect.height + 10),
+      [{ text: who }],
+      alpha
+    );
+  });
+
+  cv.imshowWait("result", twoFacesImg);
+};
+faceRecognition({ user_id: "5f950131d8fc8d05f0c5cea5" });
 /**
  * Get port from environment and store in Express.
  */
