@@ -11,9 +11,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-      `${req.user._id.toString()}-${file.fieldname}.${
-        file.mimetype.split("/")[1]
-      }`
+      `${req.user._id.toString()}-${file.fieldname}.jpg`
     );
   },
 });
@@ -40,13 +38,13 @@ router
             res.statusCode = 500;
             res.setHeader("Content-Type", "application/json");
             res.json({
-              messsage: "Failed to Upload Profile Image!",
+              message: "Failed to Upload Profile Image!",
             });
           } else {
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
             res.json({
-              messsage: "Profile Image Uploaded successfully!",
+              message: "Profile Image Uploaded successfully!",
               profile,
             });
           }
@@ -67,13 +65,13 @@ router
             res.statusCode = 500;
             res.setHeader("Content-Type", "application/json");
             res.json({
-              messsage: "Failed to Upload Cover Image!",
+              message: "Failed to Upload Cover Image!",
             });
           } else {
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
             res.json({
-              messsage: "Cover Image Uploaded successfully!",
+              message: "Cover Image Uploaded successfully!",
               profile,
             });
           }
