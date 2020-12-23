@@ -2,29 +2,46 @@ var express = require("express");
 var router = express.Router();
 var Topic = require("../models/testTopic");
 var Info = require("../models/testInfo");
+var Answer = require("../models/answer");
 var passport = require("passport");
 var authenticate = require("../authenticate");
 
 router
   .post("/start-test/:testId", authenticate.verifyUser, (req, res) => {
-    Info.create(
-      {
+    const intial_answers = [];
+    for (var id = 0; id < req.body.q_len; id++) {
+      intial_answers.push({
         user_id: req.user._id,
         test_id: req.params.testId,
-        start_time: req.body.start_time,
-      },
-      (error, info) => {
-        if (error) {
-          res.statusCode = 500;
-          res.setHeader("Content-Type", "application/json");
-          res.json(error);
-        } else {
-          res.statusCode = 200;
-          res.setHeader("Content-Type", "application/json");
-          res.json(info);
-        }
+        id
+      });
+    }
+    Answer.create(intial_answers, (error, answers) => {
+      if (error) {
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "application/json");
+        res.json(error);
+      } else {
+        Info.create(
+          {
+            user_id: req.user._id,
+            test_id: req.params.testId,
+            start_time: req.body.start_time,
+          },
+          (error, info) => {
+            if (error) {
+              res.statusCode = 500;
+              res.setHeader("Content-Type", "application/json");
+              res.json(error);
+            } else {
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "application/json");
+              res.json(info);
+            }
+          }
+        );
       }
-    );
+    });
   })
   .post("/add-warning/:testId", authenticate.verifyUser, (req, res) => {
     Info.update(
@@ -45,5 +62,18 @@ router
         }
       }
     );
+  })
+  .get("/leaderboard/:testId", authenticate.verifyUser, (req, res) => {
+    Info.find({ test_id: req.params.testId }, (error, info) => {
+      if (error) {
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "application/json");
+        res.json(error);
+      } else {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(info);
+      }
+    });
   });
 module.exports = router;

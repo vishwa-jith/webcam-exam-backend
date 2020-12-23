@@ -52,51 +52,35 @@ router
                   answer.answer_option ===
                   parseInt(req.body.answers[index].answer)
               );
-              Topic.update(
-                { _id: req.params.testId },
+              Info.update(
+                { user_id: req.user._id, test_id: topic._id },
                 {
                   $set: {
-                    test_taken_users: [...topic.test_taken_users, req.user._id],
+                    score:
+                      (correct_answers.length / answers.length) *
+                      topic.total_marks,
+                    answers: req.body.answers.map(({ answer }) => answer),
+                    end_time: req.body.end_time,
+                    answers_attended: req.body.answers_attended,
+                    answers_marked: req.body.answers_marked,
+                    unanswered: req.body.unanswered,
+                    is_fraudulant: req.body.is_fraudulant,
                   },
                 },
-                (error, update) => {
+                (error, info) => {
                   if (error) {
                     res.statusCode = 500;
                     res.setHeader("Content-Type", "application/json");
-                    res.json({ message: "Failed to update test topic!" });
+                    res.json(error);
                   } else {
-                    Info.update(
-                      { user_id: req.user._id, test_id: topic._id },
-                      {
-                        $set: {
-                          score:
-                            (correct_answers.length / answers.length) *
-                            topic.total_marks,
-                          answers: req.body.answers.map(({ answer }) => answer),
-                          end_time: req.body.end_time,
-                          answers_attended: req.body.answers_attended,
-                          answers_marked: req.body.answers_marked,
-                          unanswered: req.body.unanswered,
-                          is_fraudulant: req.body.is_fraudulant,
-                        },
-                      },
-                      (error, info) => {
-                        if (error) {
-                          res.statusCode = 500;
-                          res.setHeader("Content-Type", "application/json");
-                          res.json(error);
-                        } else {
-                          res.statusCode = 200;
-                          res.setHeader("Content-Type", "application/json");
-                          res.json({
-                            info,
-                            correct_answers,
-                            answers,
-                            ans: req.body.answers,
-                          });
-                        }
-                      }
-                    );
+                    res.statusCode = 200;
+                    res.setHeader("Content-Type", "application/json");
+                    res.json({
+                      info,
+                      correct_answers,
+                      answers,
+                      ans: req.body.answers,
+                    });
                   }
                 }
               );
