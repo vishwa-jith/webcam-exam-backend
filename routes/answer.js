@@ -1,34 +1,44 @@
 var express = require("express");
 var router = express.Router();
-var Question = require("../models/question");
-var Topic = require("../models/testTopic");
-var Info = require("../models/testInfo");
+var Answer = require("../models/answer");
 var authenticate = require("../authenticate");
+
 router
   .get("/:testId", authenticate.verifyUser, (req, res) => {
-    Question.find({ test_id: req.params.testId }, (error, questions) => {
-      if (error) {
-        res.statusCode = 500;
-        res.setHeader("Content-Type", "application/json");
-        res.json({ message: "Failed to fetch test topic!" });
-      } else {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.json({ user_id: req.user._id, questions });
+    Answer.find(
+      { test_id: req.params.testId, user_id: req.user._id },
+      (error, answers) => {
+        if (error) {
+          res.statusCode = 500;
+          res.setHeader("Content-Type", "application/json");
+          res.json({ message: "Failed to fetch test topic!" });
+        } else {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json(answers);
+        }
       }
-    });
+    );
   })
-  .post("/add", authenticate.verifyUser, (req, res) => {
-    Question.create(req.body, (error, question) => {
-      if (error) {
-        res.statusCode = 500;
-        res.setHeader("Content-Type", "application/json");
-        res.json({ message: "Failed to add test topic!" });
-      } else {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.json(question);
+  .put("/update/:testId", authenticate.verifyUser, (req, res) => {
+    Answer.updateOne(
+      {
+        test_id: req.params.testId,
+        user_id: req.user._id,
+        q_no: req.body.q_no,
+      },
+      { $set: { ...req.body } },
+      (error, answer) => {
+        if (error) {
+          res.statusCode = 500;
+          res.setHeader("Content-Type", "application/json");
+          res.json({ message: "Failed to fetch test topic!" });
+        } else {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json(answer);
+        }
       }
-    });
+    );
   });
 module.exports = router;

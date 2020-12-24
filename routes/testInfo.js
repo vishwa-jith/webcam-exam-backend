@@ -9,11 +9,11 @@ var authenticate = require("../authenticate");
 router
   .post("/start-test/:testId", authenticate.verifyUser, (req, res) => {
     const intial_answers = [];
-    for (var id = 0; id < req.body.q_len; id++) {
+    for (var q_no = 0; q_no < req.body.q_len; q_no++) {
       intial_answers.push({
         user_id: req.user._id,
         test_id: req.params.testId,
-        id
+        q_no,
       });
     }
     Answer.create(intial_answers, (error, answers) => {
@@ -36,7 +36,7 @@ router
             } else {
               res.statusCode = 200;
               res.setHeader("Content-Type", "application/json");
-              res.json(info);
+              res.json(answers);
             }
           }
         );
