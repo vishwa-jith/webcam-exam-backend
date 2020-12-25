@@ -59,7 +59,6 @@ router
                     score:
                       (correct_answers.length / answers.length) *
                       topic.total_marks,
-                    answers: req.body.answers.map(({ answer }) => answer),
                     end_time: req.body.end_time,
                     answers_attended: req.body.answers_attended,
                     answers_marked: req.body.answers_marked,
@@ -76,10 +75,7 @@ router
                     res.statusCode = 200;
                     res.setHeader("Content-Type", "application/json");
                     res.json({
-                      info,
-                      correct_answers,
-                      answers,
-                      ans: req.body.answers,
+                      message: "Test Submitted Sucessfully!",
                     });
                   }
                 }
