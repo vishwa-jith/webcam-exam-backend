@@ -3,6 +3,7 @@ var router = express.Router();
 var Question = require("../models/question");
 var Topic = require("../models/testTopic");
 var Info = require("../models/testInfo");
+var Answer = require("../models/answer");
 var authenticate = require("../authenticate");
 router
   .get("/:testId", authenticate.verifyUser, (req, res) => {
@@ -47,36 +48,51 @@ router
               res.setHeader("Content-Type", "application/json");
               res.json({ message: "Failed to fetch test topic!" });
             } else {
-              const correct_answers = answers.filter(
-                (answer, index) =>
-                  answer.answer_option ===
-                  parseInt(req.body.answers[index].answer)
-              );
-              Info.update(
-                { user_id: req.user._id, test_id: topic._id },
-                {
-                  $set: {
-                    score:
-                      (correct_answers.length / answers.length) *
-                      topic.total_marks,
-                    end_time: req.body.end_time,
-                    answers_attended: req.body.answers_attended,
-                    answers_marked: req.body.answers_marked,
-                    unanswered: req.body.unanswered,
-                    is_fraudulant: req.body.is_fraudulant,
-                  },
-                },
-                (error, info) => {
+              Answer.find(
+                { test_id: req.params.testId, user_id: req.user._id },
+                (error, chossed_answers) => {
                   if (error) {
                     res.statusCode = 500;
                     res.setHeader("Content-Type", "application/json");
-                    res.json(error);
+                    res.json({ message: "Failed to fetch Answers!" });
                   } else {
-                    res.statusCode = 200;
-                    res.setHeader("Content-Type", "application/json");
-                    res.json({
-                      message: "Test Submitted Sucessfully!",
-                    });
+                    const correct_answers = answers.filter(
+                      (answer, index) =>
+                        answer.answer_option ===
+                        parseInt(
+                          chossed_answers.filter(
+                            (answer) => answer.q_no === index
+                          )[0].answer
+                        )
+                    );
+                    Info.update(
+                      { user_id: req.user._id, test_id: topic._id },
+                      {
+                        $set: {
+                          score:
+                            (correct_answers.length / answers.length) *
+                            topic.total_marks,
+                          end_time: req.body.end_time,
+                          answers_attended: req.body.answers_attended,
+                          answers_marked: req.body.answers_marked,
+                          unanswered: req.body.unanswered,
+                          is_fraudulant: req.body.is_fraudulant,
+                        },
+                      },
+                      (error, info) => {
+                        if (error) {
+                          res.statusCode = 500;
+                          res.setHeader("Content-Type", "application/json");
+                          res.json(error);
+                        } else {
+                          res.statusCode = 200;
+                          res.setHeader("Content-Type", "application/json");
+                          res.json({
+                            message: "Test Submitted Sucessfully!",
+                          });
+                        }
+                      }
+                    );
                   }
                 }
               );
