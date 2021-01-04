@@ -22,6 +22,10 @@ const testInfo = new Schema(
       type: Number,
       default: 0,
     },
+    no_of_cam_warning: {
+      type: Number,
+      default: 0,
+    },
     answers: [Number],
     test_duration: {
       type: Number,

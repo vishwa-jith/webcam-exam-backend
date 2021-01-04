@@ -58,10 +58,13 @@ const faceRecognition = (image) => {
   };
   const basePath = "./public/images";
   const imgsPath = path.resolve(basePath, "upload");
-  const nameMappings = [`${image.user_id}-profile`, `${image.user_id}-cover`];
+  const nameMappings = [
+    `${image.user_id}-profile`,
+    `${image.user_id}-profile1`,
+  ];
   const imgFiles = [
     `${image.user_id}-profile.jpg`,
-    `${image.user_id}-cover.jpg`,
+    `${image.user_id}-profile.jpg`,
   ];
   const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
   const trainImgs = imgFiles
@@ -81,15 +84,13 @@ const faceRecognition = (image) => {
   const lbph = new cv.LBPHFaceRecognizer();
   lbph.train(trainImgs, labels);
 
-  // const base64text = image.imageSrc;
-  // const base64data = base64text
-  //   .replace("data:image/jpeg;base64", "")
-  //   .replace("data:image/png;base64", "");
-  // const buffer = Buffer.from(base64data, "base64");
-  // const twoFacesImg = cv.imdecode(buffer);
+  const base64text = image.imageSrc;
+  const base64data = base64text
+    .replace("data:image/jpeg;base64", "")
+    .replace("data:image/png;base64", "");
+  const buffer = Buffer.from(base64data, "base64");
+  const twoFacesImg = cv.imdecode(buffer);
 
-  const twoFacesImg = cv.imread(path.resolve(basePath, "vishwajith.jpg"));
-  
   const result = classifier.detectMultiScale(twoFacesImg.bgrToGray());
   const minDetections = 10;
   result.objects.forEach((faceRect, i) => {
@@ -113,10 +114,7 @@ const faceRecognition = (image) => {
       alpha
     );
   });
-
-  cv.imshowWait("result", twoFacesImg);
 };
-//faceRecognition({ user_id: "5f950131d8fc8d05f0c5cea5" });
 /**
  * Get port from environment and store in Express.
  */
