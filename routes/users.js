@@ -116,26 +116,21 @@ router.get("/profile", authenticate.verifyUser, (req, res) => {
     .catch((error) => next(error));
 });
 router.post("/update-profile", authenticate.verifyUser, (req, res) => {
-  const { firstname, lastname } = req.body;
-  User.update(
-    { _id: req.user._id },
-    { $set: { firstname, lastname } },
-    (error, profile) => {
-      if (error) {
-        res.statusCode = 500;
-        res.setHeader("Content-Type", "application/json");
-        res.json({
-          message: "Failed to Update User Details!",
-        });
-      } else {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.json({
-          message: "User Details Updated successfully!",
-          profile,
-        });
-      }
+  User.update({ _id: req.user._id }, { $set: req.body }, (error, profile) => {
+    if (error) {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.json({
+        message: "Failed to Update User Details!",
+      });
+    } else {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({
+        message: "User Details Updated successfully!",
+        profile,
+      });
     }
-  );
+  });
 });
 module.exports = router;
